@@ -22,7 +22,7 @@ while true; do
     [ $STATUS = "Discharging" ] && BATTERY="%$CAPACITY" || BATTERY="%$CAPACITY" 
     
 #   If the charge is equal or less then %15 it send a notification 
-    [[ $STATUS = "Discharging" && $CAPACITY -le "15" ]] && BATTERY="%$CAPACITY" && notify-send "Battery Critical"
+    [ $STATUS = "Discharging" ] && [ $CAPACITY -le "15" ] && BATTERY="%$CAPACITY" && notify-send "Battery Critical"
     
 #====================================================================================
 
