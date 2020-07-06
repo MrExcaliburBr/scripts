@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 #Refresh bar every 5s (I dont refresh everytime bc it takes to much cpu)
 
