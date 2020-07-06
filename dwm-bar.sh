@@ -19,16 +19,15 @@ while true; do
     STATUS=$(cat /sys/class/power_supply/BAT0/status)
 
 #   Change icon with charging statue ( "" from Cozette Vector) 
-    [ $STATUS = "Discharging" ] && BATTERY="%$CAPACITY" || BATTERY="%$CAPACITY"; 
+    [ $STATUS = "Discharging" ] && BATTERY="%$CAPACITY" || BATTERY="%$CAPACITY" 
     
 #   If the charge is equal or less then %15 it send a notification 
-    [[ $STATUS = "Discharging" && $CAPACITY -le "15" ]] && notify-send "Battery Critical"
+    [[ $STATUS = "Discharging" && $CAPACITY -le "15" ]] && BATTERY="%$CAPACITY" && notify-send "Battery Critical"
+    
 #====================================================================================
 
 #====================================================================================
 #Wifi status module
-#   Set variable
-    #WIFISTATUS=$(cat /sys/class/net/wlp3s0/operstate)
 
 #   If wifi is up use this icon "", if not us that "" 
     case "$(cat /sys/class/net/wlp3s0/operstate)" in
@@ -42,40 +41,31 @@ while true; do
 #====================================================================================
 #Music module (cmus)
 
-#   If cmus is running, then:
-#    if [ -n "$(pgrep cmus)" ]; then
+#   if cmus is running, then proceed
+    if ps -C cmus > /dev/null; then
 
-#   Check if music is playing or paused, en them puts a icon
-#	case "$(cmus-remote -Q | grep -a '^status' | awk '{gsub("status ", "");print}')" in
-#	    paused ) MSTATUS="" ;;
-#	    playing ) MSTATUS="" ;;
-	    
-#	esac
+#	Defining variables
+        NAME=$(cmus-remote -Q | grep "file" | sed 's=file /home/zezin/music/==g; s=.mp3==g')
+	TIME=$(cmus-remote -Q | grep "position" | sed 's=position ==g')
+	MUSICSTATUS=$(cmus-remote -Q | grep "status" | sed 's=status ==g')
 
-#	Get name of the music
-#	NAME=$(cmus-remote -Q | grep -a '^file' | awk '{gsub("file ", "");print}' | sed "s/.mp3//g; s/\\/home\\/zezin\\/music\\///g")
-#	MUSIC=" | $MSTATUS $NAME"
-	
-#    elif [ -z "$(pgrep cmus)" ]; then
-#	MUSIC=""
-#    fi
-#====================================================================================
-#   if [[ -n "$(pgrep cmus)" && -n "$(cmus-remote -Q | grep -a '^file' | sed "s/file //g; s/.mp3//g; s/\\/home\\/zezin\\/music\\///g")" ]]; then
-#       while true; do 
-#           NAME="$(cmus-remote -Q | grep -a '^file' | sed "s/file //g; s/.mp3//g; s/\\/home\\/zezin\\/music\\///g")"
-#           sleep 1s
-#           NAME2="$(cmus-remote -Q | grep -a '^file' | sed "s/file //g; s/.mp3//g; s/\\/home\\/zezin\\/music\\///g")"
-#           
-#           if [ "$NAME" != "$NAME2" ]; then
-#       	    notify-send -u low "Playing $NAME2"
+#	If time is between 0 and 2 and the music is plauing notify   
+	[ $TIME -ge "0" ] && [ $TIME -le "2" ] && [ $MUSICSTATUS = "playing" ] && notify-send "Now playing $NAME"
 
-#           fi
-#       done
-#   fi
-    
+#	Change icon for play and pause
+	[ $MUSICSTATUS = "playing" ] && ICON="⏵" || ICON="⏸" 
+
+#	If cmus was running set icon, if not its a empty string	
+	MUSIC=" | $ICON $NAME"
+
+    else
+	MUSIC=""
+
+    fi
+
 #   Put the variables on the bar 
-    xsetroot -name " | $WIFI | $BATTERY | $DATE | "
+    xsetroot -name "$MUSIC | $WIFI | $BATTERY | $DATE | "
 
-    sleep 5s
+    sleep 1s
 
 done
