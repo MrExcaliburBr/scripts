@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # You can call this script like this:
 # $ ./brightnessControl.sh up
@@ -8,18 +8,18 @@
 # https://github.com/dastorm/volume-notification-dunst/blob/master/volume.sh
 # https://gist.github.com/sebastiencs/5d7227f388d93374cebdf72e783fbd6a
 
-function get_brightness {
+get_brightness() {
   xbacklight -get | cut -d '.' -f 1
 }
 
-function send_notification {
+send_notification() {
   icon=""
   brightness=$(get_brightness)
 
   # Make the bar with the special character ─ (it's not dash -)
   # https://en.wikipedia.org/wiki/Box-drawing_character
-  slashes=$(( $brightness / 10 ))
-  blanks=$(( $(( 100 - $brightness )) / 10 ))
+  slashes=$(( brightness / 10 ))
+  blanks=$(( $(( 100 - brightness )) / 10 ))
   bar=$(seq -s "█" 0 $slashes | sed 's/[0-9]//g')$(seq -s " " 0 $blanks | sed 's/[0-9]//g')"▏"
 
   # Send the notification
