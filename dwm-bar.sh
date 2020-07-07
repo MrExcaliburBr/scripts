@@ -31,8 +31,8 @@ while true; do
 
 #   If wifi is up use this icon "", if not us that "" 
     case "$(cat /sys/class/net/wlp3s0/operstate)" in
-	down ) WIFI="" ;; 
-	up ) WIFI="" ;;
+	down ) WIFI="睊" ;; 
+	up ) WIFI="直" ;;
     
     esac
 
@@ -53,7 +53,7 @@ while true; do
 	[ $TIME -ge "0" ] && [ $TIME -le "2" ] && [ $MUSICSTATUS = "playing" ] && notify-send "Now playing $NAME"
 
 #	Change icon for play and pause
-	[ $MUSICSTATUS = "playing" ] && ICON="⏵" || ICON="⏸" 
+	[ $MUSICSTATUS = "playing" ] && ICON="" || ICON="" 
 
 #	If cmus was running set icon, if not its a empty string	
 	MUSIC=" | $ICON $NAME"
@@ -64,7 +64,7 @@ while true; do
     fi
 
 #   Put the variables on the bar 
-    xsetroot -name "$MUSIC | $WIFI | $BATTERY | $DATE | "
+    xsetroot -name "$MUSIC | $BATTERY | $DATE | $WIFI "
 
     sleep 1s
 
