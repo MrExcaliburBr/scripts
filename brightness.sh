@@ -7,6 +7,7 @@
 # Script inspired by these wonderful people:
 # https://github.com/dastorm/volume-notification-dunst/blob/master/volume.sh
 # https://gist.github.com/sebastiencs/5d7227f388d93374cebdf72e783fbd6a
+# aaand modified for my needs
 
 get_brightness() {
   xbacklight -get | cut -d '.' -f 1

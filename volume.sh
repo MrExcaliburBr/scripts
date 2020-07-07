@@ -8,6 +8,7 @@
 # Script modified from these wonderful people:
 # https://github.com/dastorm/volume-notification-dunst/blob/master/volume.sh
 # https://gist.github.com/sebastiencs/5d7227f388d93374cebdf72e783fbd6a
+# aaand modified by meee
 
 get_volume() {
   amixer -c 1 get Master | grep '%' | head -n 1 | cut -d '[' -f 2 | cut -d '%' -f 1
